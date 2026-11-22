@@ -1,0 +1,51 @@
+{
+  "demo_id": "indexerror_en",
+  "mode": "code",
+  "language": "en",
+  "topic": null,
+  "input": {
+    "mode": "code",
+    "topic": null,
+    "error_text": "Traceback (most recent call last):\n  File \"scores.py\", line 3, in <module>\n    print(nums[i])\nIndexError: list index out of range",
+    "code_snippet": "nums = [4, 8, 15]\nfor i in range(len(nums) + 1):\n    print(nums[i])",
+    "explanation": "I think the loop runs too many times. By the end the list becomes empty so Python has nothing to print. I removed the +1 and it worked but I'm not sure why.",
+    "output_lang": "en"
+  },
+  "analysis": {
+    "input_ok": true,
+    "input_issue": null,
+    "topic_title": "Python IndexError: list index out of range",
+    "detected_language": "en",
+    "praise": "You found the fix yourself, and you sensed the loop runs too far.",
+    "concepts": [
+      {"id": "C1", "label": "Loop runs one step too far", "expected_idea": "range(len(nums) + 1) produces 0, 1, 2, 3, so the loop tries one index more than exists.", "status": "partial", "evidence_quote": "I think the loop runs too many times.", "reason": "Correct direction, but you didn't say which i causes the problem.", "confidence": "medium", "gap_headline": "Exactly which i breaks"},
+      {"id": "C2", "label": "Indexes start at 0", "expected_idea": "Valid indexes are 0 to len - 1, so a 3-item list has no index 3.", "status": "missing", "evidence_quote": "", "reason": "Zero-based indexing, the real rule here, isn't mentioned.", "confidence": "high", "gap_headline": "Zero-based indexing"},
+      {"id": "C3", "label": "Reading doesn't empty the list", "expected_idea": "print(nums[i]) only reads; the list keeps all 3 items. The error is a missing index, not an empty list.", "status": "misconception", "evidence_quote": "By the end the list becomes empty", "reason": "Reading items does not remove them; the list never becomes empty here.", "confidence": "high", "gap_headline": "The list never became empty"},
+      {"id": "C4", "label": "Correct fix", "expected_idea": "Use range(len(nums)) or loop directly with for n in nums.", "status": "correct", "evidence_quote": "I removed the +1 and it worked", "reason": "This is the right fix.", "confidence": "high", "gap_headline": ""}
+    ]
+  },
+  "lesson": {
+    "lessons": [
+      {"gap_id": "G1", "concept_id": "C3", "title": "Reading never removes items", "core_idea": "nums[i] just looks at an item, like reading a page number. The list still has 4, 8, 15 at the end. Python crashed because it was asked for a position that doesn't exist.", "example": "Reading a classmate's name from the register doesn't remove them from the class.", "you_said": "The list becomes empty by the end of the loop.", "actually": "The list is unchanged; the code asked for index 3, which doesn't exist.", "code_fix": null, "check_yourself": "Which list methods actually remove items?"},
+      {"gap_id": "G2", "concept_id": "C2", "title": "Counting starts at 0", "core_idea": "Python numbers positions from 0. A list with 3 items has positions 0, 1, 2. The last valid index is always len(list) - 1.", "example": "In a 3-floor building numbered from the ground floor as 0, the floors are 0, 1, 2; there is no floor 3.", "you_said": "You didn't mention how indexes are numbered.", "actually": "Indexes run 0 to len - 1.", "code_fix": null, "check_yourself": "What is the last index of a 10-item list?"},
+      {"gap_id": "G3", "concept_id": "C1", "title": "The extra step is i = 3", "core_idea": "range(n) gives 0 up to n - 1. So range(len(nums) + 1) = range(4) gives 0, 1, 2, 3. The last value, i = 3, asks for nums[3], and that triggers the IndexError.", "example": "range(4) → 0, 1, 2, 3: four numbers, but your list has only three slots.", "you_said": "The loop runs too many times.", "actually": "It runs exactly once too many, and i = 3 is the bad index.", "code_fix": {"before": "for i in range(len(nums) + 1):\n    print(nums[i])", "after": "for n in nums:\n    print(n)", "explanation": "Looping over items directly can never go past the end."}, "check_yourself": "What values does range(5) produce?"}
+    ],
+    "estimated_read_seconds": 60
+  },
+  "retest": {
+    "questions": [
+      {"q_id": "Q1", "concept_id": "C3", "type": "mcq", "prompt": "colors = ['red', 'green', 'blue']\nfor c in colors:\n    print(c)\nAfter this runs, what is len(colors)?", "options": ["0", "1", "3", "It raises an error"], "correct_option_index": 2, "rubric": {"full_credit": "Chooses 3: printing doesn't remove items.", "partial_credit": "", "key_terms": ["3", "unchanged"]}},
+      {"q_id": "Q2", "concept_id": "C2", "type": "short", "prompt": "names = ['Ana', 'Bo', 'Cy', 'Di']. What is the largest index you can use on names, and why?", "options": [], "correct_option_index": null, "rubric": {"full_credit": "3, because indexing starts at 0 so the last index is len - 1.", "partial_credit": "Says 3 without the zero-based reason.", "key_terms": ["starts at 0", "zero", "len - 1", "len-1", "0"]}},
+      {"q_id": "Q3", "concept_id": "C1", "type": "short", "prompt": "For the same names list, which values of i does range(len(names) + 1) produce, and which one causes the IndexError?", "options": [], "correct_option_index": null, "rubric": {"full_credit": "0, 1, 2, 3, 4, and i = 4 causes it.", "partial_credit": "Says it goes one too far without naming i = 4.", "key_terms": ["4", "0, 1, 2, 3, 4", "0 to 4", "one too many"]}}
+    ]
+  },
+  "sample_answers": {
+    "Q1": "2",
+    "Q2": "3, because there are 4 names.",
+    "Q3": "0, 1, 2, 3, 4. When i = 4 it is out of range."
+  },
+  "grades": {
+    "Q2": {"q_id": "Q2", "points": 1, "feedback": "3 is right. For full marks, say why: indexes start at 0, so the last one is len - 1.", "matched_ideas": ["largest index is 3"]},
+    "Q3": {"q_id": "Q3", "points": 2, "feedback": "Exactly: range(5) gives 0 to 4, and i = 4 has no item.", "matched_ideas": ["values 0 to 4", "i = 4 causes the error"]}
+  }
+}

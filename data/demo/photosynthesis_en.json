@@ -1,0 +1,52 @@
+{
+  "demo_id": "photosynthesis_en",
+  "mode": "concept",
+  "language": "en",
+  "topic": "Photosynthesis",
+  "input": {
+    "mode": "concept",
+    "topic": "Photosynthesis",
+    "explanation": "Plants take their food from the soil through the roots, and sunlight turns that food into energy. The chlorophyll in leaves absorbs the light. This makes glucose and oxygen, and the plant uses the glucose later.",
+    "error_text": null,
+    "code_snippet": null,
+    "output_lang": "en"
+  },
+  "analysis": {
+    "input_ok": true,
+    "input_issue": null,
+    "topic_title": "Photosynthesis",
+    "detected_language": "en",
+    "praise": "You correctly named chlorophyll, light, and both products: glucose and oxygen.",
+    "concepts": [
+      {"id": "C1", "label": "Chlorophyll captures light energy", "expected_idea": "Chlorophyll in leaves absorbs light energy that powers the process.", "status": "correct", "evidence_quote": "The chlorophyll in leaves absorbs the light.", "reason": "You stated this clearly.", "confidence": "high", "gap_headline": ""},
+      {"id": "C2", "label": "Food is built from air and water", "expected_idea": "Plants build glucose from carbon dioxide from the air and water; soil supplies only minerals, not food.", "status": "misconception", "evidence_quote": "Plants take their food from the soil through the roots", "reason": "This suggests the plant's food comes ready-made from soil, which is a common misconception.", "confidence": "high", "gap_headline": "Plant food doesn't come from soil"},
+      {"id": "C3", "label": "Products: glucose and oxygen", "expected_idea": "Photosynthesis produces glucose and releases oxygen.", "status": "correct", "evidence_quote": "This makes glucose and oxygen", "reason": "Both products named correctly.", "confidence": "high", "gap_headline": ""},
+      {"id": "C4", "label": "Released oxygen comes from water", "expected_idea": "Light energy splits water molecules; the oxygen gas released comes from water, not from carbon dioxide.", "status": "missing", "evidence_quote": "", "reason": "You didn't mention where the oxygen comes from or that water is split.", "confidence": "medium", "gap_headline": "Where the oxygen comes from"},
+      {"id": "C5", "label": "How glucose is used", "expected_idea": "Glucose is stored as starch and broken down in respiration to release energy for the cell.", "status": "partial", "evidence_quote": "the plant uses the glucose later", "reason": "Right direction, but how the glucose is used (storage, respiration) is not explained.", "confidence": "medium", "gap_headline": "What 'using glucose' really means"}
+    ]
+  },
+  "lesson": {
+    "lessons": [
+      {"gap_id": "G1", "concept_id": "C2", "title": "Plants make food from air", "core_idea": "Soil gives plants water and small amounts of minerals, but not food. The plant builds its own food, glucose, from carbon dioxide taken from the air through tiny leaf pores, plus water from the roots.", "example": "A mango tree weighing tonnes didn't eat tonnes of soil. Most of its wood is carbon that once floated in the air as CO2.", "you_said": "Plants take ready-made food from the soil.", "actually": "Plants make their food from CO2 and water using light; soil adds only minerals.", "code_fix": null, "check_yourself": "If soil were the food, what should happen to the soil as a tree grows?"},
+      {"gap_id": "G2", "concept_id": "C4", "title": "Oxygen is split from water", "core_idea": "Light energy is used to split water molecules (H2O) inside the leaf. The hydrogen is used to build glucose, and the oxygen is released as O2 gas.", "example": "The bubbles you see on underwater plants in a pond on a sunny day are oxygen that came from water molecules.", "you_said": "You didn't mention where the oxygen comes from.", "actually": "The O2 a plant releases comes from splitting water.", "code_fix": null, "check_yourself": "Which molecule gives up its oxygen atoms to make O2?"},
+      {"gap_id": "G3", "concept_id": "C5", "title": "Glucose: stored, then burned", "core_idea": "Plants turn extra glucose into starch to store it. Day and night, cells break glucose down in respiration to release the energy they need to live and grow.", "example": "A potato is a plant's starch store, glucose saved for later and used through respiration.", "you_said": "The plant uses glucose later.", "actually": "Glucose is stored as starch and broken down by respiration for energy.", "code_fix": null, "check_yourself": "What process releases energy from glucose?"}
+    ],
+    "estimated_read_seconds": 70
+  },
+  "retest": {
+    "questions": [
+      {"q_id": "Q1", "concept_id": "C2", "type": "mcq", "prompt": "A 2 kg seedling grows into a 200 kg tree, but the soil in its pot loses only a few grams. Where did most of the tree's new mass come from?", "options": ["Minerals absorbed from the soil", "Carbon dioxide from the air, plus water", "Sunlight turned directly into matter", "Fertilizer added to the pot"], "correct_option_index": 1, "rubric": {"full_credit": "Chooses CO2 from air plus water.", "partial_credit": "", "key_terms": ["carbon dioxide", "co2", "air", "water"]}},
+      {"q_id": "Q2", "concept_id": "C4", "type": "short", "prompt": "Scientists give a plant water containing a traceable 'heavy' oxygen atom. Will that heavy oxygen appear in the O2 gas the plant releases, or in its glucose? Explain why.", "options": [], "correct_option_index": null, "rubric": {"full_credit": "In the released O2, because light splits water and water's oxygen is released as O2.", "partial_credit": "Says released O2 without explaining water splitting.", "key_terms": ["water", "split", "released", "o2", "oxygen gas", "photolysis"]}},
+      {"q_id": "Q3", "concept_id": "C5", "type": "short", "prompt": "At night there is no light for photosynthesis. How does a plant still get the energy to keep its cells alive?", "options": [], "correct_option_index": null, "rubric": {"full_credit": "Breaks down stored glucose or starch through respiration to release energy.", "partial_credit": "Mentions using stored glucose but not respiration.", "key_terms": ["respiration", "starch", "stored", "break down", "glucose"]}}
+    ]
+  },
+  "sample_answers": {
+    "Q1": "1",
+    "Q2": "In the oxygen gas the plant releases, because light energy splits water molecules and the oxygen from water is released as O2.",
+    "Q3": "It uses the glucose it made during the day."
+  },
+  "grades": {
+    "Q2": {"q_id": "Q2", "points": 2, "feedback": "Exactly right: water is split by light, and its oxygen is released as O2.", "matched_ideas": ["water is split", "oxygen released as O2"]},
+    "Q3": {"q_id": "Q3", "points": 1, "feedback": "Right idea. For full marks, say the glucose (or stored starch) is broken down by respiration to release energy.", "matched_ideas": ["uses stored glucose"]}
+  }
+}

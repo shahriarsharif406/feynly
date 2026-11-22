@@ -1,0 +1,191 @@
+{
+  "demo_id": "indexerror_bn",
+  "mode": "code",
+  "language": "bn",
+  "topic": null,
+  "input": {
+    "mode": "code",
+    "topic": null,
+    "error_text": "Traceback (most recent call last):\n  File \"scores.py\", line 3, in <module>\n    print(nums[i])\nIndexError: list index out of range",
+    "code_snippet": "nums = [4, 8, 15]\nfor i in range(len(nums) + 1):\n    print(nums[i])",
+    "explanation": "আমার মনে হয় লুপটা বেশি বার চলছে। শেষে গিয়ে লিস্টটা খালি হয়ে যায়, তাই Python কিছু প্রিন্ট করতে পারে না। আমি +1 সরিয়ে দিলে কাজ করে, কিন্তু কেন বুঝিনি।",
+    "output_lang": "bn"
+  },
+  "analysis": {
+    "input_ok": true,
+    "input_issue": null,
+    "topic_title": "Python IndexError: list index out of range",
+    "detected_language": "bn",
+    "praise": "সমাধানটা তুমি নিজেই খুঁজে পেয়েছ, আর বুঝেছ লুপটা বেশি দূর যাচ্ছে।",
+    "concepts": [
+      {
+        "id": "C1",
+        "label": "লুপ এক ধাপ বেশি চলে",
+        "expected_idea": "range(len(nums) + 1) দেয় 0, 1, 2, 3, তাই লুপ যত ইনডেক্স আছে তার চেয়ে একটি বেশি চায়।",
+        "status": "partial",
+        "evidence_quote": "আমার মনে হয় লুপটা বেশি বার চলছে।",
+        "reason": "দিক ঠিক, কিন্তু কোন i সমস্যা করছে তা বলোনি।",
+        "confidence": "medium",
+        "gap_headline": "ঠিক কোন i-তে সমস্যা"
+      },
+      {
+        "id": "C2",
+        "label": "ইনডেক্স শুরু হয় ০ থেকে",
+        "expected_idea": "বৈধ ইনডেক্স 0 থেকে len - 1; তাই ৩টি আইটেমের লিস্টে ইনডেক্স 3 নেই।",
+        "status": "missing",
+        "evidence_quote": "",
+        "reason": "আসল নিয়ম, শূন্য থেকে ইনডেক্স গোনা, উল্লেখ নেই।",
+        "confidence": "high",
+        "gap_headline": "ইনডেক্স শুরু হয় ০ থেকে"
+      },
+      {
+        "id": "C3",
+        "label": "পড়লে লিস্ট খালি হয় না",
+        "expected_idea": "print(nums[i]) শুধু পড়ে; লিস্টে ৩টি আইটেমই থাকে। সমস্যা হলো ইনডেক্স না থাকা, লিস্ট খালি হওয়া নয়।",
+        "status": "misconception",
+        "evidence_quote": "শেষে গিয়ে লিস্টটা খালি হয়ে যায়",
+        "reason": "আইটেম পড়লে তা সরে যায় না; এখানে লিস্ট কখনো খালি হয়নি।",
+        "confidence": "high",
+        "gap_headline": "লিস্ট কখনো খালি হয়নি"
+      },
+      {
+        "id": "C4",
+        "label": "সঠিক সমাধান",
+        "expected_idea": "range(len(nums)) ব্যবহার করো, অথবা সরাসরি for n in nums দিয়ে লুপ চালাও।",
+        "status": "correct",
+        "evidence_quote": "আমি +1 সরিয়ে দিলে কাজ করে",
+        "reason": "এটাই সঠিক সমাধান।",
+        "confidence": "high",
+        "gap_headline": ""
+      }
+    ]
+  },
+  "lesson": {
+    "lessons": [
+      {
+        "gap_id": "G1",
+        "concept_id": "C3",
+        "title": "পড়লে আইটেম সরে না",
+        "core_idea": "nums[i] শুধু একটা আইটেম দেখে, যেমন পাতার নম্বর পড়া। শেষেও লিস্টে 4, 8, 15 থাকে। Python থেমেছে কারণ এমন একটা অবস্থান চাওয়া হয়েছে যা নেই।",
+        "example": "হাজিরা খাতা থেকে বন্ধুর নাম পড়লে সে ক্লাস থেকে বাদ পড়ে না।",
+        "you_said": "লুপের শেষে লিস্ট খালি হয়ে যায়।",
+        "actually": "লিস্ট একই আছে; কোড ইনডেক্স 3 চেয়েছে, যা নেই।",
+        "code_fix": null,
+        "check_yourself": "কোন লিস্ট মেথড আসলে আইটেম সরায়?"
+      },
+      {
+        "gap_id": "G2",
+        "concept_id": "C2",
+        "title": "গোনা শুরু হয় ০ থেকে",
+        "core_idea": "Python অবস্থান গোনে 0 থেকে। ৩টি আইটেমের লিস্টে অবস্থান 0, 1, 2। শেষ বৈধ ইনডেক্স সবসময় len(list) - 1।",
+        "example": "নিচতলাকে ০ ধরে ৩ তলা ভবনের তলাগুলো ০, ১, ২; ৩ নম্বর তলা নেই।",
+        "you_said": "ইনডেক্স কীভাবে গোনা হয় তা বলোনি।",
+        "actually": "ইনডেক্স চলে 0 থেকে len - 1।",
+        "code_fix": null,
+        "check_yourself": "১০টি আইটেমের লিস্টের শেষ ইনডেক্স কত?"
+      },
+      {
+        "gap_id": "G3",
+        "concept_id": "C1",
+        "title": "বাড়তি ধাপটা i = 3",
+        "core_idea": "range(n) দেয় 0 থেকে n - 1। তাই range(len(nums) + 1) = range(4) দেয় 0, 1, 2, 3। শেষ মান i = 3 চায় nums[3], আর সেখানেই IndexError।",
+        "example": "range(4) → 0, 1, 2, 3: চারটি সংখ্যা, কিন্তু তোমার লিস্টে ঘর মাত্র তিনটি।",
+        "you_said": "লুপ বেশি বার চলছে।",
+        "actually": "ঠিক একবার বেশি চলছে, আর i = 3 হলো খারাপ ইনডেক্স।",
+        "code_fix": {
+          "before": "for i in range(len(nums) + 1):\n    print(nums[i])",
+          "after": "for n in nums:\n    print(n)",
+          "explanation": "সরাসরি আইটেমের ওপর লুপ চালালে কখনো শেষ ছাড়িয়ে যাওয়া যায় না।"
+        },
+        "check_yourself": "range(5) কোন কোন মান দেয়?"
+      }
+    ],
+    "estimated_read_seconds": 60
+  },
+  "retest": {
+    "questions": [
+      {
+        "q_id": "Q1",
+        "concept_id": "C3",
+        "type": "mcq",
+        "prompt": "colors = ['red', 'green', 'blue']\nfor c in colors:\n    print(c)\nএটি চলার পর len(colors) কত?",
+        "options": [
+          "0",
+          "1",
+          "3",
+          "এরর হয়"
+        ],
+        "correct_option_index": 2,
+        "rubric": {
+          "full_credit": "3 বেছে নেয়: প্রিন্ট করলে আইটেম সরে না।",
+          "partial_credit": "",
+          "key_terms": [
+            "3",
+            "একই"
+          ]
+        }
+      },
+      {
+        "q_id": "Q2",
+        "concept_id": "C2",
+        "type": "short",
+        "prompt": "names = ['Ana', 'Bo', 'Cy', 'Di']। names-এ সবচেয়ে বড় কোন ইনডেক্স ব্যবহার করা যায়, এবং কেন?",
+        "options": [],
+        "correct_option_index": null,
+        "rubric": {
+          "full_credit": "3, কারণ ইনডেক্স 0 থেকে শুরু, তাই শেষটি len - 1।",
+          "partial_credit": "কারণ ছাড়া শুধু 3 বলে।",
+          "key_terms": [
+            "০ থেকে",
+            "শূন্য",
+            "len - 1",
+            "len-1",
+            "starts at 0"
+          ]
+        }
+      },
+      {
+        "q_id": "Q3",
+        "concept_id": "C1",
+        "type": "short",
+        "prompt": "একই names লিস্টের জন্য range(len(names) + 1) কোন কোন i দেয়, আর কোনটি IndexError ঘটায়?",
+        "options": [],
+        "correct_option_index": null,
+        "rubric": {
+          "full_credit": "0, 1, 2, 3, 4 এবং i = 4 এরর ঘটায়।",
+          "partial_credit": "i = 4 না বলে শুধু এক ধাপ বেশি বলে।",
+          "key_terms": [
+            "4",
+            "৪",
+            "0 to 4",
+            "০ থেকে ৪"
+          ]
+        }
+      }
+    ]
+  },
+  "sample_answers": {
+    "Q1": "2",
+    "Q2": "3, কারণ লিস্টে ৪টা নাম আছে।",
+    "Q3": "0, 1, 2, 3, 4। i = 4 হলে রেঞ্জের বাইরে চলে যায়।"
+  },
+  "grades": {
+    "Q2": {
+      "q_id": "Q2",
+      "points": 1,
+      "feedback": "3 ঠিক। পূর্ণ নম্বরের জন্য কারণ বলো: ইনডেক্স 0 থেকে শুরু, তাই শেষটি len - 1।",
+      "matched_ideas": [
+        "সর্বোচ্চ ইনডেক্স 3"
+      ]
+    },
+    "Q3": {
+      "q_id": "Q3",
+      "points": 2,
+      "feedback": "একদম ঠিক: range(5) দেয় 0 থেকে 4, আর i = 4-এ কোনো আইটেম নেই।",
+      "matched_ideas": [
+        "মান 0 থেকে 4",
+        "i = 4 এরর ঘটায়"
+      ]
+    }
+  }
+}
