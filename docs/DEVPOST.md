@@ -33,4 +33,4 @@ python, streamlit, google-gemini, pydantic, sqlite, claude-code
 
 ## Links
 - Code: https://github.com/shahriarsharif406/feynly
-- Live demo: (add after deploy)
+- Live demo: (https://feynly-l6rvhgyx5xiwcozaqn3c8r.streamlit.app/)

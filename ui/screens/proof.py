@@ -77,7 +77,8 @@ def render() -> None:
             (s.get(f"ans_{q.q_id}") is not None) if q.type == "mcq" else bool((s.get(f"ans_{q.q_id}") or "").strip())
             for q in retest.questions
         )
-        if match_demo_input(inp):
+        _case = match_demo_input(inp)
+        if _case and all(q.q_id in _case.sample_answers for q in retest.questions) and demo:
             st.button(t("btn_fill_samples", ui_lang), on_click=_fill_samples)
         if st.button(t("btn_submit", ui_lang), type="primary", disabled=not answered):
             answers = {q.q_id: str(s.get(f"ans_{q.q_id}")) for q in retest.questions}
