@@ -26,7 +26,12 @@ class GeminiClient:
     def __init__(self, api_key: str, primary: str = C.MODEL_PRIMARY, fallback: str = C.MODEL_FALLBACK) -> None:
         from google import genai  # imported lazily so Demo Mode needs no SDK
 
-        self._client = genai.Client(api_key=api_key)
+        from google.genai import types
+
+        try:
+            self._client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=45_000))
+        except Exception:
+            self._client = genai.Client(api_key=api_key)
         self.primary, self.fallback = primary, fallback
         self.last_error = ""
 
@@ -38,8 +43,9 @@ class GeminiClient:
             response_mime_type="application/json",
             response_schema=schema,
             temperature=temperature,
-            max_output_tokens=max_tokens,
+            max_output_tokens=max(max_tokens, 8192),  # newer models count thinking tokens in this budget
         )
+
         def build(with_thinking: bool):
             c = dict(cfg)
             if with_thinking:
@@ -111,6 +117,7 @@ class GeminiClient:
                     )
                 except Exception as e:  # network / API errors
                     self.last_error = f"{model}: {type(e).__name__}: {str(e)[:160]}"
+                    print("[feynly] AI error:", self.last_error, flush=True)
                     if not _is_retryable(e) or tries >= len(delays):
                         break
                     time.sleep(delays[tries])
