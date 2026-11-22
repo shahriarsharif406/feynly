@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import os
 
-MODEL_PRIMARY = os.environ.get("FEYNLY_MODEL", "gemini-2.5-flash")
-MODEL_FALLBACK = os.environ.get("FEYNLY_MODEL_FALLBACK", "gemini-2.5-flash-lite")
+MODEL_PRIMARY = os.environ.get("FEYNLY_MODEL", "gemini-3.8-flash")
+MODEL_FALLBACK = os.environ.get("FEYNLY_MODEL_FALLBACK", "gemini-3.5-flash-lite")
 DB_PATH = os.environ.get("FEYNLY_DB", "./data/feynly.db")
 PROMPT_VERSION = "v1"
 

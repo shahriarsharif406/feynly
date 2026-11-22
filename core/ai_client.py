@@ -40,13 +40,21 @@ class GeminiClient:
             temperature=temperature,
             max_output_tokens=max_tokens,
         )
+        def build(with_thinking: bool):
+            c = dict(cfg)
+            if with_thinking:
+                try:
+                    c["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
+                except Exception:
+                    pass
+            return types.GenerateContentConfig(**c)
+
         try:
-            cfg["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
-            config = types.GenerateContentConfig(**cfg)
-        except Exception:
-            cfg.pop("thinking_config", None)
-            config = types.GenerateContentConfig(**cfg)
-        resp = self._client.models.generate_content(model=model, contents=user, config=config)
+            resp = self._client.models.generate_content(model=model, contents=user, config=build(True))
+        except Exception as e:
+            if "thinking" not in str(e).lower():
+                raise
+            resp = self._client.models.generate_content(model=model, contents=user, config=build(False))
         text = getattr(resp, "text", None)
         if not text:
             raise ConsistencyError("empty response")
