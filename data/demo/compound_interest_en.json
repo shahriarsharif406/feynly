@@ -1,0 +1,199 @@
+{
+ "demo_id": "compound_interest_en",
+ "mode": "concept",
+ "language": "en",
+ "topic": "Compound interest",
+ "input": {
+  "mode": "concept",
+  "topic": "Compound interest",
+  "explanation": "Compound interest means you earn interest every year, and it's calculated only on the money you first put in. If I put 100 and the rate is 10%, I get 10 each year, so after 3 years I have 130. It grows faster than saving without interest.",
+  "error_text": null,
+  "code_snippet": null,
+  "output_lang": "en"
+ },
+ "analysis": {
+  "input_ok": true,
+  "input_issue": null,
+  "topic_title": "Compound interest",
+  "detected_language": "en",
+  "praise": "You know that interest is earned over time and that saving with interest beats saving without it.",
+  "concepts": [
+   {
+    "id": "C1",
+    "label": "Interest is earned over time",
+    "expected_idea": "Interest is a percentage paid on money kept in an account.",
+    "status": "correct",
+    "evidence_quote": "you earn interest every year",
+    "reason": "Stated correctly.",
+    "confidence": "high",
+    "gap_headline": ""
+   },
+   {
+    "id": "C2",
+    "label": "Interest is charged on the growing balance",
+    "expected_idea": "In compound interest, each year's interest is calculated on the original amount plus interest already earned.",
+    "status": "misconception",
+    "evidence_quote": "it's calculated only on the money you first put in",
+    "reason": "Interest only on the original amount is simple interest, which is a different thing.",
+    "confidence": "high",
+    "gap_headline": "That's simple interest, not compound"
+   },
+   {
+    "id": "C3",
+    "label": "Growth speeds up over time",
+    "expected_idea": "Because the balance grows, each year's gain is larger than the last, which is exponential growth.",
+    "status": "missing",
+    "evidence_quote": "",
+    "reason": "You didn't say that the yearly gains themselves grow.",
+    "confidence": "medium",
+    "gap_headline": "Why growth speeds up"
+   },
+   {
+    "id": "C4",
+    "label": "Compounding beats no interest",
+    "expected_idea": "Interest makes savings grow, and compounding makes them grow faster than simple interest.",
+    "status": "partial",
+    "evidence_quote": "It grows faster than saving without interest.",
+    "reason": "True, but the comparison that matters is with simple interest.",
+    "confidence": "medium",
+    "gap_headline": "Faster than what?"
+   },
+   {
+    "id": "C5",
+    "label": "Computing the balance",
+    "expected_idea": "100 at 10% compounded for 3 years is 100 × 1.1 × 1.1 × 1.1 = 133.10.",
+    "status": "misconception",
+    "evidence_quote": "after 3 years I have 130",
+    "reason": "130 is the simple-interest result; compounding gives 133.10.",
+    "confidence": "high",
+    "gap_headline": "The balance is 133.10, not 130"
+   }
+  ]
+ },
+ "lesson": {
+  "lessons": [
+   {
+    "gap_id": "G1",
+    "concept_id": "C2",
+    "title": "Interest earns interest",
+    "core_idea": "In compound interest, each period's interest is added to the balance, and the next interest is calculated on that bigger balance. Interest calculated only on the original deposit is called simple interest.",
+    "example": "100 at 10%: year 1 interest is 10, so the balance is 110. In year 2 the interest is 10% of 110, which is 11, not 10.",
+    "you_said": "Interest is only calculated on the money you first put in.",
+    "actually": "It is calculated on the deposit plus the interest already earned.",
+    "code_fix": null,
+    "check_yourself": "In year 2, what is the 10% applied to?"
+   },
+   {
+    "gap_id": "G2",
+    "concept_id": "C5",
+    "title": "Multiply by 1.1 each year",
+    "core_idea": "Growing by 10% means multiplying by 1.10. After 3 years: 100 × 1.1 × 1.1 × 1.1 = 133.10, not 130.",
+    "example": "130 is what simple interest gives; the extra 3.10 is interest earned on interest.",
+    "you_said": "After 3 years I have 130.",
+    "actually": "After 3 years at 10% compounded, 100 becomes 133.10.",
+    "code_fix": null,
+    "check_yourself": "What is 100 worth after 2 years at 10% compounded?"
+   },
+   {
+    "gap_id": "G3",
+    "concept_id": "C3",
+    "title": "Why growth speeds up",
+    "core_idea": "Each year's interest is calculated on a larger balance, so the yearly gains themselves grow: 10, 11, 12.10 and so on. The curve bends upward, which is called exponential growth.",
+    "example": "A snowball rolling downhill picks up more snow on each turn because it is bigger.",
+    "you_said": "You didn't mention that the gains grow over time.",
+    "actually": "The yearly gain increases because the balance it is calculated on increases.",
+    "code_fix": null,
+    "check_yourself": "Which year's interest is larger, year 1 or year 5?"
+   }
+  ],
+  "estimated_read_seconds": 70
+ },
+ "retest": {
+  "questions": [
+   {
+    "q_id": "Q1",
+    "concept_id": "C2",
+    "type": "mcq",
+    "prompt": "You deposit 200 at 5% yearly interest, compounded annually. In year 2, the interest is calculated on…",
+    "options": [
+     "Only the original 200",
+     "The 200 plus the interest earned in year 1",
+     "Only the interest earned in year 1",
+     "The average of the two balances"
+    ],
+    "correct_option_index": 1,
+    "rubric": {
+     "full_credit": "Chooses deposit plus earned interest.",
+     "partial_credit": "",
+     "key_terms": [
+      "balance",
+      "earned"
+     ]
+    }
+   },
+   {
+    "q_id": "Q2",
+    "concept_id": "C5",
+    "type": "short",
+    "prompt": "What is the balance after 2 years on 1000 at 10% compounded annually? Show your steps.",
+    "options": [],
+    "correct_option_index": null,
+    "rubric": {
+     "full_credit": "After year 1 it is 1100; year 2 interest is 110, so 1210.",
+     "partial_credit": "Gets 1100 for year 1 but not 1210 for year 2.",
+     "key_terms": [
+      "1100",
+      "1210",
+      "110",
+      "10%"
+     ]
+    }
+   },
+   {
+    "q_id": "Q3",
+    "concept_id": "C3",
+    "type": "short",
+    "prompt": "Why does a compound-interest balance grow by larger amounts each year, even though the rate stays the same?",
+    "options": [],
+    "correct_option_index": null,
+    "rubric": {
+     "full_credit": "Because each year the interest is calculated on a bigger balance that includes earlier interest.",
+     "partial_credit": "Says the balance gets bigger without linking it to interest being calculated on it.",
+     "key_terms": [
+      "bigger",
+      "larger",
+      "balance",
+      "interest on interest",
+      "previous interest",
+      "higher"
+     ]
+    }
+   }
+  ]
+ },
+ "sample_answers": {
+  "Q1": "1",
+  "Q2": "After year 1 it is 1100. In year 2 the interest is 10% of 1100, which is 110, so I have 1210.",
+  "Q3": "Because the balance gets bigger every year."
+ },
+ "grades": {
+  "Q2": {
+   "q_id": "Q2",
+   "points": 2,
+   "feedback": "Exactly right: 1100 after year 1, then 10% of 1100 is 110, giving 1210.",
+   "matched_ideas": [
+    "1100",
+    "110",
+    "1210"
+   ]
+  },
+  "Q3": {
+   "q_id": "Q3",
+   "points": 1,
+   "feedback": "Right: the balance grows. For full marks, say the interest is calculated on that bigger balance each year.",
+   "matched_ideas": [
+    "balance grows"
+   ]
+  }
+ }
+}

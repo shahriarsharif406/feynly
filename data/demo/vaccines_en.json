@@ -1,0 +1,200 @@
+{
+ "demo_id": "vaccines_en",
+ "mode": "concept",
+ "language": "en",
+ "topic": "How vaccines work",
+ "input": {
+  "mode": "concept",
+  "topic": "How vaccines work",
+  "explanation": "A vaccine gives you a weakened version of the disease so your body gets a little sick and builds strength. Your white blood cells learn to recognize the germ and make antibodies. After that, if the real germ shows up, your body responds faster. Vaccines work forever once you get them.",
+  "error_text": null,
+  "code_snippet": null,
+  "output_lang": "en"
+ },
+ "analysis": {
+  "input_ok": true,
+  "input_issue": null,
+  "topic_title": "How vaccines work",
+  "detected_language": "en",
+  "praise": "You understood the core idea: the immune system learns the germ and responds faster next time.",
+  "concepts": [
+   {
+    "id": "C1",
+    "label": "Immune cells learn the germ",
+    "expected_idea": "White blood cells learn to recognise the germ and make antibodies.",
+    "status": "correct",
+    "evidence_quote": "Your white blood cells learn to recognize the germ and make antibodies.",
+    "reason": "Clearly stated.",
+    "confidence": "high",
+    "gap_headline": ""
+   },
+   {
+    "id": "C2",
+    "label": "Vaccines train without causing the disease",
+    "expected_idea": "Vaccines show the body a harmless piece, inactive form or instructions for a piece of the germ, so it can practise without catching the disease.",
+    "status": "misconception",
+    "evidence_quote": "so your body gets a little sick",
+    "reason": "Vaccines do not give you the disease; a sore arm or mild fever is the immune system reacting.",
+    "confidence": "high",
+    "gap_headline": "A vaccine doesn't make you ill"
+   },
+   {
+    "id": "C3",
+    "label": "Memory makes later response faster",
+    "expected_idea": "Memory cells let the body respond faster and stronger to the real germ later.",
+    "status": "correct",
+    "evidence_quote": "if the real germ shows up, your body responds faster",
+    "reason": "Correct and clear.",
+    "confidence": "high",
+    "gap_headline": ""
+   },
+   {
+    "id": "C4",
+    "label": "What the body is shown (antigens)",
+    "expected_idea": "Immune cells recognise a germ by markers called antigens; a vaccine presents an antigen so the body can prepare.",
+    "status": "missing",
+    "evidence_quote": "",
+    "reason": "You didn't say what the immune system is actually shown.",
+    "confidence": "medium",
+    "gap_headline": "What the body is shown"
+   },
+   {
+    "id": "C5",
+    "label": "Protection can fade",
+    "expected_idea": "Protection can decline over time and some germs change, so some vaccines need boosters or yearly updates.",
+    "status": "misconception",
+    "evidence_quote": "Vaccines work forever once you get them",
+    "reason": "Some vaccines protect for life, but many need boosters because protection fades.",
+    "confidence": "high",
+    "gap_headline": "Protection isn't always forever"
+   }
+  ]
+ },
+ "lesson": {
+  "lessons": [
+   {
+    "gap_id": "G1",
+    "concept_id": "C2",
+    "title": "Vaccines train, they don't infect",
+    "core_idea": "Most vaccines use a harmless piece of the germ, an inactivated germ, or instructions for making one harmless piece. The immune system practises on it without causing the disease. A sore arm or a mild fever is the immune system reacting, not the disease itself.",
+    "example": "A fire drill uses a pretend alarm so people practise the exits. Nobody's building is on fire.",
+    "you_said": "Your body gets a little sick from the vaccine.",
+    "actually": "The vaccine shows your body a harmless look-alike; a mild fever is the immune response.",
+    "code_fix": null,
+    "check_yourself": "Why can a fire drill teach people to evacuate without a real fire?"
+   },
+   {
+    "gap_id": "G2",
+    "concept_id": "C5",
+    "title": "Protection can fade",
+    "core_idea": "Antibody levels and memory cells can fall over time, and some germs, like flu viruses, keep changing. That is why some vaccines need booster doses or yearly updates.",
+    "example": "Like a language you studied but never practised: you remember it for a while, then you need a refresher.",
+    "you_said": "Vaccines work forever once you get them.",
+    "actually": "Some protect for many years, others fade or must be updated; boosters refresh the memory.",
+    "code_fix": null,
+    "check_yourself": "Why is the flu vaccine updated every year?"
+   },
+   {
+    "gap_id": "G3",
+    "concept_id": "C4",
+    "title": "What the immune system actually sees",
+    "core_idea": "Immune cells recognise a germ by markers on its surface called antigens. A vaccine shows an antigen, or instructions to make one, so the body can build antibodies and memory cells against it.",
+    "example": "A wanted poster with the culprit's face lets guards spot that person later without ever meeting them.",
+    "you_said": "You didn't mention what the body is shown.",
+    "actually": "The body is shown an antigen: a harmless identifying marker of the germ.",
+    "code_fix": null,
+    "check_yourself": "What is an antigen, in one sentence?"
+   }
+  ],
+  "estimated_read_seconds": 70
+ },
+ "retest": {
+  "questions": [
+   {
+    "q_id": "Q1",
+    "concept_id": "C2",
+    "type": "mcq",
+    "prompt": "Why can a vaccine teach your body to fight a disease without giving you that disease?",
+    "options": [
+     "It contains the full, active germ in a small dose",
+     "It shows the immune system a harmless piece or inactive form of the germ",
+     "It replaces your white blood cells with stronger ones",
+     "It kills every germ already in your body"
+    ],
+    "correct_option_index": 1,
+    "rubric": {
+     "full_credit": "Chooses the harmless piece or inactive form.",
+     "partial_credit": "",
+     "key_terms": [
+      "harmless",
+      "inactive"
+     ]
+    }
+   },
+   {
+    "q_id": "Q2",
+    "concept_id": "C5",
+    "type": "short",
+    "prompt": "A person had a tetanus vaccine 20 years ago and a doctor suggests a booster. Why might a booster still help?",
+    "options": [],
+    "correct_option_index": null,
+    "rubric": {
+     "full_credit": "Protection and memory levels can decline over time, so a booster refreshes the immune memory.",
+     "partial_credit": "Says protection may wear off without mentioning memory.",
+     "key_terms": [
+      "fade",
+      "decline",
+      "wane",
+      "wear off",
+      "memory",
+      "booster",
+      "over time"
+     ]
+    }
+   },
+   {
+    "q_id": "Q3",
+    "concept_id": "C4",
+    "type": "short",
+    "prompt": "Why might a vaccine containing only a harmless protein from a virus's surface still protect you against the whole virus?",
+    "options": [],
+    "correct_option_index": null,
+    "rubric": {
+     "full_credit": "The immune system recognises that protein (an antigen) and builds antibodies and memory cells that will attack the real virus carrying it.",
+     "partial_credit": "Says the body learns from the protein without naming recognition or antibodies.",
+     "key_terms": [
+      "antigen",
+      "protein",
+      "recogni",
+      "antibod",
+      "memory",
+      "surface"
+     ]
+    }
+   }
+  ]
+ },
+ "sample_answers": {
+  "Q1": "1",
+  "Q2": "Because the protection can wear off, so a booster tops it up.",
+  "Q3": "Because the body learns something from that protein."
+ },
+ "grades": {
+  "Q2": {
+   "q_id": "Q2",
+   "points": 1,
+   "feedback": "Right idea: protection can wear off. For full marks, add that the booster refreshes the immune memory.",
+   "matched_ideas": [
+    "protection wears off"
+   ]
+  },
+  "Q3": {
+   "q_id": "Q3",
+   "points": 1,
+   "feedback": "You sense the body learns from the protein. For full marks, say the immune system recognises it as an antigen and makes antibodies and memory cells.",
+   "matched_ideas": [
+    "body learns from protein"
+   ]
+  }
+ }
+}

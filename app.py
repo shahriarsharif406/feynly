@@ -7,7 +7,7 @@ from core import config as C
 from core.i18n import t
 from ui import components as ui
 from ui import state, theme
-from ui.screens import explain, gaps, proof
+from ui.screens import explain, gaps, proof, teacher
 
 
 @st.dialog("How scoring works")
@@ -33,6 +33,7 @@ def main() -> None:
 
     {"explain": explain.render, "gaps": gaps.render, "proof": proof.render}[s["stage"]]()
 
+    teacher.render(lang)
     ui.footer(lang)
     f1, f2 = st.columns([2, 2])
     with f1:

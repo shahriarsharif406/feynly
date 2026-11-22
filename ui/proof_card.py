@@ -60,3 +60,26 @@ def build_proof_html(
         + "".join(body)
         + f'<div class="foot">{e(t("disclaimer", lang))}<br>{e(t("proof_footer", lang))}</div></div></body></html>'
     )
+
+
+def build_share_svg(topic: str, lang: str, before: int, after: int, concepts: list[Concept],
+                    retest_points: dict[str, int] | None) -> str:
+    """1200x630 shareable image (SVG opens anywhere and converts to PNG in any browser or editor)."""
+    import re
+
+    e = html.escape
+    inner = re.sub(r"^<svg[^>]*>|</svg>$", "", bowl_svg(concepts, retest_points, after, score_text=num(after, lang),
+                                                       band_text=e(band_label(band(after), lang))))
+    delta = after - before
+    d_txt = ("+" if delta >= 0 else "−") + num(abs(delta), lang)
+    title = e(topic if len(topic) <= 46 else topic[:45] + "…")
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">'
+        '<rect width="1200" height="630" fill="#F6F0E4"/><rect x="24" y="24" width="1152" height="582" rx="28" fill="#FFFBF3" stroke="#E2D5C0" stroke-width="2"/>'
+        '<text x="80" y="110" font-family="Fraunces, Georgia, serif" font-size="44" font-weight="600" fill="#1E2433">Feyn<tspan fill="#C9952B">ly</tspan></text>'
+        f'<text x="80" y="200" font-family="Fraunces, Tiro Bangla, Georgia, serif" font-size="52" font-weight="600" fill="#1E2433">{title}</text>'
+        f'<text x="80" y="290" font-family="Hind Siliguri, Georgia, serif" font-size="34" fill="#5B6274">{e(t("before", lang))} {num(before, lang)}  →  {e(t("after", lang))} {num(after, lang)}</text>'
+        f'<rect x="80" y="330" rx="40" width="230" height="80" fill="#C9952B"/><text x="195" y="387" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="46" font-weight="600" fill="#1E2433">{e(d_txt)}</text>'
+        f'<text x="80" y="520" font-family="Hind Siliguri, Georgia, serif" font-size="30" fill="#5B6274">{e(t("tagline", lang))}</text>'
+        f'<g transform="translate(760,110) scale(2.2)">{inner}</g></svg>'
+    )

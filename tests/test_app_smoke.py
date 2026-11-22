@@ -42,3 +42,12 @@ def test_full_demo_loop_bn_code():
     _btn(at, "উত্তর জমা").click().run()
     assert not at.exception, at.exception
     assert at.session_state["after_score"] == 88
+
+
+def test_sample_picker_and_class_code():
+    at = _app()
+    at.selectbox[0].select("vaccines_en").run()
+    at.text_input(key="in_class").set_value("bio-9a").run()
+    _btn(at, "sample").click().run()
+    assert not at.exception, at.exception
+    assert at.session_state["before_score"] == 40

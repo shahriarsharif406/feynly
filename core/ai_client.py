@@ -51,6 +51,26 @@ class GeminiClient:
             raise ConsistencyError("empty response")
         return text
 
+    def transcribe(self, audio: bytes, mime: str, lang: str) -> str:
+        """Speech to text for the optional voice input. Returns plain text or raises AIUnavailable."""
+        from google.genai import types
+
+        hint = "Bangla (Bengali script)" if lang == "bn" else "the language spoken"
+        prompt = (
+            f"Transcribe this speech verbatim in {hint}. Output only the transcript, no commentary. "
+            "If there is no speech, output nothing."
+        )
+        part = types.Part.from_bytes(data=audio, mime_type=mime)
+        for model in (self.primary, self.fallback):
+            try:
+                resp = self._client.models.generate_content(model=model, contents=[prompt, part])
+                text = (getattr(resp, "text", None) or "").strip()
+                if text:
+                    return text
+            except Exception:
+                continue
+        raise AIUnavailable("transcription failed")
+
     def generate_json(
         self,
         system: str,

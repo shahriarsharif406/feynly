@@ -7,6 +7,9 @@ Feynly checks whether you really understand something. You explain a topic (or a
 - **Honest scoring:** scores are computed by Python from checkpoint statuses, never by the AI. Negative change is shown as it is.
 - **Grounded:** every claimed misconception must quote your own words, verified in code.
 - **Bangla + English** UI and lessons. Concept mode and Bug-to-Lesson code mode.
+- **Share it:** download a share image (SVG) and copy-ready text of your before/after.
+- **Progress + class view:** see the gaps that keep coming back; teachers can view class-wide common gaps via a shared class code (no names stored).
+- **Voice (optional, Live AI):** speak your explanation, review the transcript, then use it.
 - **Works without a key:** Demo Mode ships 4 pre-made cases so anyone can try it instantly.
 
 ## Run locally
@@ -15,6 +18,9 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 Optional: set `GEMINI_API_KEY` (free Google AI Studio key) in `.streamlit/secrets.toml` or the environment for Live AI.
+
+## Evaluation
+`python scripts/evaluate.py` checks scoring, quote verification and the offline grader on the demo cases (see `docs/EVALUATION.md`). Honest note: the offline keyword grader is only a fallback and agrees with reference grades on about half of short answers; Live AI grading is the intended path.
 
 ## Tests
 ```

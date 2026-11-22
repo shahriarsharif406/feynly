@@ -189,3 +189,18 @@ def run_grade(
         grades[q.q_id] = grade_short(q, ans, inp.output_lang)
     _state()["notice"] = "graded_offline"
     return grades
+
+
+def run_transcribe(audio: bytes, mime: str, lang: str) -> str:
+    """Optional voice input (Live AI only). Counts against the session AI budget."""
+    client = _get_client()
+    if client is None:
+        raise StepFailed("err_no_key")
+    if not can_call_ai():
+        raise StepFailed("err_budget")
+    _throttle()
+    record_ai_call()
+    try:
+        return client.transcribe(audio, mime, lang)
+    except AIUnavailable:
+        raise StepFailed("err_ai_busy")

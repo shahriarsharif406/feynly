@@ -17,6 +17,14 @@ DEMO_IDS: dict[tuple[str, str], str] = {
     ("code", "bn"): "indexerror_bn",
 }
 
+# Extra English sample cases shown in the Demo Mode picker (first id of each list is the default).
+DEMO_CASES: dict[tuple[str, str], list[str]] = {
+    ("concept", "en"): ["photosynthesis_en", "vaccines_en", "compound_interest_en"],
+    ("concept", "bn"): ["photosynthesis_bn"],
+    ("code", "en"): ["indexerror_en"],
+    ("code", "bn"): ["indexerror_bn"],
+}
+
 _cache: dict[str, DemoCase] = {}
 
 
@@ -27,14 +35,19 @@ def load_demo(demo_id: str) -> DemoCase:
     return _cache[demo_id].model_copy(deep=True)
 
 
-def demo_for(mode: str, lang: str) -> DemoCase:
-    return load_demo(DEMO_IDS[(mode, lang)])
+def demo_ids_for(mode: str, lang: str) -> list[str]:
+    return DEMO_CASES.get((mode, lang)) or [DEMO_IDS[(mode, lang)]]
+
+
+def demo_for(mode: str, lang: str, demo_id: str | None = None) -> DemoCase:
+    ids = demo_ids_for(mode, lang)
+    return load_demo(demo_id if demo_id in ids else ids[0])
 
 
 def match_demo_input(inp: LoopInput) -> Optional[DemoCase]:
     """A demo case matches when the explanation is exactly a sample explanation."""
     target = normalize(inp.explanation)
-    for demo_id in DEMO_IDS.values():
+    for demo_id in {i for ids in DEMO_CASES.values() for i in ids}:
         case = load_demo(demo_id)
         if case.mode == inp.mode and normalize(case.input.explanation) == target:
             return case

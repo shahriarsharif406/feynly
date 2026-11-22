@@ -4,11 +4,11 @@ from __future__ import annotations
 import streamlit as st
 
 from core import config as C
-from core.demo import demo_for, match_demo_input
-from core.i18n import t
+from core.demo import demo_for, demo_ids_for, load_demo, match_demo_input
+from core.i18n import num, t
 from core.models import LoopInput
-from core.pipeline import StepFailed, run_analyze, run_lesson
-from core.storage import get_conn, recent_attempts, save_attempt
+from core.pipeline import StepFailed, run_analyze, run_lesson, run_transcribe
+from core.storage import get_conn, progress_summary, save_attempt
 from core.validation import validate_input
 from ui import components as ui
 from ui.state import go
@@ -16,12 +16,43 @@ from ui.state import go
 
 def _use_sample() -> None:
     s = st.session_state
-    case = demo_for(s.get("mode") or "concept", s.get("lang") or "en")
+    case = demo_for(s.get("mode") or "concept", s.get("lang") or "en", s.get("sample_pick"))
     s["in_topic"] = case.input.topic or ""
     s["in_explanation"] = case.input.explanation
     s["in_error"] = case.input.error_text or ""
     s["in_code"] = case.input.code_snippet or ""
     s["run_sample"] = True
+
+
+def _use_transcript() -> None:
+    s = st.session_state
+    cap = C.EXPLANATION_MAX_CONCEPT if (s.get("mode") or "concept") == "concept" else C.EXPLANATION_MAX_CODE
+    s["in_explanation"] = f'{s.get("in_explanation") or ""} {s.get("voice_text") or ""}'.strip()[:cap]
+    s["voice_text"] = None
+
+
+def _voice(lang: str, demo: bool) -> None:
+    """Optional: speak the explanation. Gemini transcribes it; the student reviews it before use."""
+    s = st.session_state
+    if demo or not hasattr(st, "audio_input"):
+        if demo:
+            st.caption(t("voice_demo", lang))
+        return
+    audio = st.audio_input(t("voice_label", lang), key="voice_audio")
+    if audio is not None:
+        data = audio.getvalue()
+        h = hash(data)
+        if h != s.get("voice_hash"):
+            s["voice_hash"] = h
+            try:
+                with st.spinner(t("voice_transcribing", lang)):
+                    s["voice_text"] = run_transcribe(data, audio.type or "audio/wav", lang)
+            except StepFailed:
+                s["voice_text"] = None
+                st.caption(":red[" + t("voice_fail", lang) + "]")
+    if s.get("voice_text"):
+        st.text_area(t("voice_label", lang), value=s["voice_text"], key="voice_text", height=90, label_visibility="collapsed")
+        st.button(t("voice_use", lang), on_click=_use_transcript)
 
 
 def _collect(mode: str, lang: str) -> LoopInput:
@@ -62,7 +93,8 @@ def _run(inp: LoopInput, demo: bool, lang: str) -> None:
     s["demo_id"] = case.demo_id if case else None
     try:
         s["attempt_id"] = save_attempt(
-            get_conn(), s["session_id"], inp, analysis, gaps, lesson, before, source, s["demo_id"], s.get("last_model")
+            get_conn(), s["session_id"], inp, analysis, gaps, lesson, before, source, s["demo_id"], s.get("last_model"),
+            (s.get("in_class") or "").strip().upper() or None,
         )
     except Exception:
         s["attempt_id"] = None  # history is a convenience; never block the loop on storage
@@ -92,6 +124,13 @@ def render() -> None:
         ui.banner("notice", t(s["notice"], lang))
         s["notice"] = None
 
+    ids = demo_ids_for(mode, lang)
+    if len(ids) > 1:
+        st.selectbox(t("sample_pick", lang), ids, key="sample_pick",
+                     format_func=lambda i: load_demo(i).topic or i)
+
+    _voice(lang, demo)
+
     if mode == "concept":
         st.text_input(t("topic_label", lang), key="in_topic", max_chars=C.TOPIC_MAX, placeholder=t("topic_ph", lang))
         st.text_area(t("explain_label", lang), key="in_explanation", height=220, max_chars=C.EXPLANATION_MAX_CONCEPT,
@@ -102,6 +141,8 @@ def render() -> None:
         st.text_area(t("code_label", lang), key="in_code", height=110, max_chars=C.CODE_MAX)
         st.markdown("</div>", unsafe_allow_html=True)
         st.text_area(t("why_label", lang), key="in_explanation", height=130, max_chars=C.EXPLANATION_MAX_CODE)
+
+    st.text_input(t("class_label", lang), key="in_class", max_chars=20, placeholder=t("class_ph", lang))
 
     exp_len = len(s.get("in_explanation") or "")
     cap = C.EXPLANATION_MAX_CONCEPT if mode == "concept" else C.EXPLANATION_MAX_CODE
@@ -137,10 +178,15 @@ def render() -> None:
         return
 
     try:
-        recent = recent_attempts(get_conn(), s["session_id"])
+        prog = progress_summary(get_conn(), s["session_id"])
     except Exception:
-        recent = []
-    if recent:
-        with st.expander(t("recent_loops", lang)):
-            for r in recent:
-                st.write(f"{r['topic_title']} · {r['before_score']} → {r['after_score']} · {r['created_at'][:10]}")
+        prog = {"loops": [], "open_gaps": []}
+    with st.expander(t("progress_title", lang)):
+        if not prog["loops"]:
+            st.caption(t("progress_empty", lang))
+        for r in prog["loops"]:
+            st.write(f"{r['topic_title']} · {num(r['before_score'], lang)} → {num(r['after_score'], lang)} · {r['created_at'][:10]}")
+        if prog["open_gaps"]:
+            st.markdown(f"**{t('recurring_gaps', lang)}**")
+            for g in prog["open_gaps"]:
+                st.write(f"• {g['label']} ×{num(g['n'], lang)}")

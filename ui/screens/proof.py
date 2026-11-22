@@ -13,7 +13,7 @@ from core.pipeline import run_grade
 from core.scoring import after_score, build_proof_rows
 from core.storage import get_conn, save_proof
 from ui import components as ui
-from ui.proof_card import build_proof_html
+from ui.proof_card import build_proof_html, build_share_svg
 from ui.reveal import render_reveal
 from ui.state import reset_loop
 
@@ -121,6 +121,12 @@ def render() -> None:
     html_doc = build_proof_html(
         analysis.topic_title, lang, before, after, rows, datetime.now(timezone.utc).isoformat(), concepts, rp
     )
+    share_txt = t("share_text", lang, topic=analysis.topic_title, before=num(before, lang), after=num(after, lang))
+    with st.expander(t("share_title", ui_lang)):
+        st.code(share_txt, language=None)
+        st.download_button(t("btn_download_image", ui_lang),
+                           build_share_svg(analysis.topic_title, lang, before, after, concepts, rp),
+                           file_name=f"feynly-share-{slug}.svg", mime="image/svg+xml")
     b1, b2 = st.columns(2)
     b1.download_button(t("btn_download", ui_lang), html_doc, file_name=f"feynly-proof-{slug}.html",
                        mime="text/html", use_container_width=True)
