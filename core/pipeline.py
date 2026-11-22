@@ -83,7 +83,9 @@ def _live(name, system, user, schema, temperature, max_tokens, validator, lang):
     record_ai_call()
     try:
         res, model = client.generate_json(system, user, schema, temperature, max_tokens, validator)
-    except AIUnavailable:
+    except Exception as e:  # match by name: Streamlit can reload ai_client and change the class identity
+        if not isinstance(e, AIUnavailable) and type(e).__name__ != "AIUnavailable":
+            raise
         _state()["last_ai_error"] = getattr(client, "last_error", "")
         raise StepFailed("err_ai_busy")
     _state()["last_model"] = model
@@ -203,5 +205,7 @@ def run_transcribe(audio: bytes, mime: str, lang: str) -> str:
     record_ai_call()
     try:
         return client.transcribe(audio, mime, lang)
-    except AIUnavailable:
+    except Exception as e:
+        if not isinstance(e, AIUnavailable) and type(e).__name__ != "AIUnavailable":
+            raise
         raise StepFailed("err_ai_busy")
