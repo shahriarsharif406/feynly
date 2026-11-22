@@ -38,16 +38,20 @@ class GeminiClient:
     def _call(self, model: str, system: str, user: str, schema: type[BaseModel], temperature: float, max_tokens: int) -> str:
         from google.genai import types
 
-        cfg = dict(
-            system_instruction=system,
-            response_mime_type="application/json",
-            response_schema=schema,
-            temperature=temperature,
-            max_output_tokens=max(max_tokens, 8192),  # newer models count thinking tokens in this budget
-        )
+        import json as _json
 
-        def build(with_thinking: bool):
-            c = dict(cfg)
+        def build(with_thinking: bool, with_schema: bool):
+            sysmsg = system
+            c = dict(
+                response_mime_type="application/json",
+                temperature=temperature,
+                max_output_tokens=max(max_tokens, 8192),  # newer models count thinking tokens here
+            )
+            if with_schema:
+                c["response_schema"] = schema
+            else:
+                sysmsg = system + "\n\nReturn ONLY valid JSON matching this JSON schema:\n" + _json.dumps(schema.model_json_schema())
+            c["system_instruction"] = sysmsg
             if with_thinking:
                 try:
                     c["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
@@ -55,12 +59,22 @@ class GeminiClient:
                     pass
             return types.GenerateContentConfig(**c)
 
-        try:
-            resp = self._client.models.generate_content(model=model, contents=user, config=build(True))
-        except Exception as e:
-            if "thinking" not in str(e).lower():
+        # Try progressively simpler configs when the API rejects the request (400).
+        tiers = [(True, True), (False, True), (False, False)]
+        resp = None
+        last = None
+        for i, (th, sc) in enumerate(tiers):
+            try:
+                resp = self._client.models.generate_content(model=model, contents=user, config=build(th, sc))
+                break
+            except Exception as e:
+                last = e
+                msg = str(e)
+                if i < len(tiers) - 1 and ("400" in msg or "INVALID_ARGUMENT" in msg or "thinking" in msg.lower()):
+                    continue
                 raise
-            resp = self._client.models.generate_content(model=model, contents=user, config=build(False))
+        if resp is None:
+            raise last
         text = getattr(resp, "text", None)
         if not text:
             raise ConsistencyError("empty response")
