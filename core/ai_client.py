@@ -130,8 +130,9 @@ class GeminiClient:
                         "Return only valid JSON matching the schema."
                     )
                 except Exception as e:  # network / API errors
-                    self.last_error = f"{model}: {type(e).__name__}: {str(e)[:160]}"
-                    print("[feynly] AI error:", self.last_error, flush=True)
+                    err = f"{model}: {type(e).__name__}: {str(e)[:160]}"
+                    self.last_error = (self.last_error + " | " + err) if (self.last_error and model != self.primary) else err
+                    print("[feynly] AI error:", err, flush=True)
                     if not _is_retryable(e) or tries >= len(delays):
                         break
                     time.sleep(delays[tries])
