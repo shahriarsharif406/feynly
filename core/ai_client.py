@@ -28,6 +28,7 @@ class GeminiClient:
 
         self._client = genai.Client(api_key=api_key)
         self.primary, self.fallback = primary, fallback
+        self.last_error = ""
 
     def _call(self, model: str, system: str, user: str, schema: type[BaseModel], temperature: float, max_tokens: int) -> str:
         from google.genai import types
@@ -92,6 +93,7 @@ class GeminiClient:
                 try:
                     return attempt(model, prompt), model
                 except (ValidationError, ConsistencyError, ValueError) as e:
+                    self.last_error = f"{model}: {type(e).__name__}: {str(e)[:160]}"
                     if validation_retried:
                         break  # give this model up, try the fallback
                     validation_retried = True
@@ -100,6 +102,7 @@ class GeminiClient:
                         "Return only valid JSON matching the schema."
                     )
                 except Exception as e:  # network / API errors
+                    self.last_error = f"{model}: {type(e).__name__}: {str(e)[:160]}"
                     if not _is_retryable(e) or tries >= len(delays):
                         break
                     time.sleep(delays[tries])

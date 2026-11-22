@@ -84,6 +84,7 @@ def _live(name, system, user, schema, temperature, max_tokens, validator, lang):
     try:
         res, model = client.generate_json(system, user, schema, temperature, max_tokens, validator)
     except AIUnavailable:
+        _state()["last_ai_error"] = getattr(client, "last_error", "")
         raise StepFailed("err_ai_busy")
     _state()["last_model"] = model
     _CACHE[key] = res

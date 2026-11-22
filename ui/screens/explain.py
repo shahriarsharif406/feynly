@@ -77,6 +77,7 @@ def _run(inp: LoopInput, demo: bool, lang: str) -> None:
         if not analysis.input_ok:
             slot.empty()
             s["error_key"] = f"issue_{analysis.input_issue}"
+            st.rerun()
             return
         ui.loader(slot, "load_gaps", lang)
         lesson = run_lesson(inp, analysis, gaps, demo)
@@ -84,6 +85,7 @@ def _run(inp: LoopInput, demo: bool, lang: str) -> None:
     except StepFailed as ex:
         slot.empty()
         s["error_key"] = ex.key
+        st.rerun()
         return
     slot.empty()
     case = match_demo_input(inp) if demo else None
@@ -162,6 +164,8 @@ def render() -> None:
     if s.get("error_key"):
         key = s["error_key"]
         ui.banner("error", t(key, lang))
+        if key == "err_ai_busy" and s.get("last_ai_error"):
+            st.caption(f"Details: {s['last_ai_error']}")
         if key in ("err_ai_busy", "err_budget") and st.button(t("btn_run_demo", lang)):
             s["force_demo"] = True
             _use_sample()
