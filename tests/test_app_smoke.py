@@ -51,3 +51,12 @@ def test_sample_picker_and_class_code():
     _btn(at, "sample").click().run()
     assert not at.exception, at.exception
     assert at.session_state["before_score"] == 40
+
+
+def test_run_demo_instead_after_ai_error():
+    at = _app()
+    at.session_state["error_key"] = "err_ai_busy"
+    at.run()
+    _btn(at, "demo").click().run()
+    assert not at.exception, at.exception
+    assert at.session_state["stage"] == "gaps"

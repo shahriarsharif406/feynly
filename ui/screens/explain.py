@@ -105,6 +105,14 @@ def _run(inp: LoopInput, demo: bool, lang: str) -> None:
     go("gaps")
 
 
+def _run_demo_instead() -> None:
+    """Callback: widget-bound state (the footer toggle) may only be changed before widgets render."""
+    s = st.session_state
+    s["force_demo"] = True
+    s["error_key"] = None
+    _use_sample()
+
+
 def render() -> None:
     s = st.session_state
     lang = s.get("lang") or "en"
@@ -171,11 +179,8 @@ def render() -> None:
         ui.banner("error", t(key, lang))
         if key == "err_ai_busy" and s.get("last_ai_error"):
             st.caption(f"Details: {s['last_ai_error']}")
-        if key in ("err_ai_busy", "err_budget") and st.button(t("btn_run_demo", lang)):
-            s["force_demo"] = True
-            _use_sample()
-            s["error_key"] = None
-            st.rerun()
+        if key in ("err_ai_busy", "err_budget"):
+            st.button(t("btn_run_demo", lang), on_click=_run_demo_instead)
 
     if s.pop("run_sample", False):
         sample_inp = _collect(mode, lang)
