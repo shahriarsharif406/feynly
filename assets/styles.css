@@ -41,7 +41,7 @@ p, li, label, .stMarkdown { font-family: var(--font-body); }
 /* ---------- top bar ---------- */
 .fy-topbar { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4px; }
 .fy-wordmark { font-family: var(--font-display); font-size: 38px; font-weight: 600; color: var(--ink); line-height: 1;
-  text-shadow: 0 1px 0 #000, 0 3px 0 rgba(0,0,0,.45), 0 10px 24px rgba(232,181,74,.28); }
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,.6)) drop-shadow(0 10px 20px rgba(232,181,74,.28)); }
 .fy-wordmark span { background: linear-gradient(180deg, #FFE08A, #D79A2A); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .fy-tagline { color: var(--ink-muted); font-size: 15px; margin-top: 4px; letter-spacing: .02em; }
 .fy-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; padding: 4px 14px;
