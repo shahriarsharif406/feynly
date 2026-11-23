@@ -11,6 +11,7 @@ from core.pipeline import StepFailed, run_analyze, run_lesson, run_transcribe
 from core.storage import get_conn, progress_summary, save_attempt
 from core.validation import validate_input
 from ui import components as ui
+from ui.bowl import hero_bowl
 from ui.state import go
 
 
@@ -110,7 +111,11 @@ def render() -> None:
     demo = C.is_demo_mode(s.get("force_demo", False))
     mode = s.get("mode") or "concept"
 
-    st.markdown(f'<div class="fy-h1" lang="{lang}">{t("h1_explain", lang)}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="fy-hero"><div class="fy-h1" lang="{lang}">{t("h1_explain", lang)}</div>'
+        f'<div class="fy-orb" aria-hidden="true">{hero_bowl(190)}</div></div>',
+        unsafe_allow_html=True,
+    )
     st.segmented_control(
         t("mode_label", lang),
         ["concept", "code"],

@@ -43,22 +43,35 @@ def stepper(stage: str, lang: str) -> None:
     names = [t("step_explain", lang), t("step_mend", lang), t("step_prove", lang)]
     xs = [70, 280, 490]
     parts = ['<svg class="fy-stepper" viewBox="0 0 560 64" width="100%" height="64" role="img" aria-label="progress">']
-    parts.append('<path d="M70 22 C 175 22, 175 22, 280 22 S 385 22, 490 22" stroke="#E2D5C0" stroke-width="2" fill="none"/>')
-    parts.append('<path d="M490 22 C 540 22, 545 52, 490 52 L 70 52 C 15 52, 20 22, 70 22" stroke="#E2D5C0" stroke-width="2" fill="none" stroke-dasharray="4 4"/>')
+    parts.append(
+        "<defs>"
+        '<radialGradient id="sG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFF1B8"/><stop offset=".55" stop-color="#E8B54A"/><stop offset="1" stop-color="#A9701A"/></radialGradient>'
+        '<radialGradient id="sD" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#9BF0CB"/><stop offset=".55" stop-color="#3FB589"/><stop offset="1" stop-color="#1F6B50"/></radialGradient>'
+        '<radialGradient id="sU" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#4A5270"/><stop offset="1" stop-color="#161B2C"/></radialGradient>'
+        '<filter id="sGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="4"/></filter>'
+        "</defs>"
+    )
+    parts.append('<path d="M70 26 L490 26" stroke="rgba(255,255,255,.14)" stroke-width="3" stroke-linecap="round" fill="none"/>')
+    if idx > 0:
+        parts.append(f'<path d="M70 26 L{xs[idx]} 26" stroke="#E8B54A" stroke-width="3" stroke-linecap="round" fill="none"/>')
     for i, (x, name) in enumerate(zip(xs, names)):
-        fill = "#C9952B" if i == idx else "#2E6B57" if i < idx else "#FFFBF3"
-        stroke = "#C9952B" if i == idx else "#2E6B57" if i < idx else "#8C93A3"
-        parts.append(f'<circle cx="{x}" cy="22" r="9" fill="{fill}" stroke="{stroke}" stroke-width="2"/>')
+        grad = "sG" if i == idx else "sD" if i < idx else "sU"
+        if i == idx:
+            parts.append(f'<circle cx="{x}" cy="26" r="13" fill="#E8B54A" opacity=".55" filter="url(#sGlow)"/>')
+        parts.append(f'<ellipse cx="{x}" cy="40" rx="9" ry="3" fill="#000" opacity=".45"/>')
+        parts.append(f'<circle cx="{x}" cy="26" r="11" fill="url(#{grad})" stroke="rgba(255,255,255,.35)" stroke-width="1"/>')
         cls = "on" if i == idx else ""
-        parts.append(f'<text x="{x}" y="12" text-anchor="middle" class="{cls}" style="transform:translateY(-1px)">{e(name)}</text>')
+        parts.append(f'<text x="{x}" y="12" text-anchor="middle" class="{cls}">{e(name)}</text>')
     parts.append("</svg>")
     _html("".join(parts))
 
 
 def loader(placeholder, step_key: str, lang: str) -> None:
     placeholder.markdown(
-        '<div class="fy-loader"><svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13" fill="#A9542F"/>'
-        '<path d="M17 4 A13 13 0 0 1 30 17" fill="none" stroke="#C9952B" stroke-width="3" stroke-linecap="round"/></svg>'
+        '<div class="fy-loader"><svg width="36" height="36" viewBox="0 0 34 34"><defs><radialGradient id="lG" cx=".35" cy=".3" r=".8">'
+        '<stop offset="0" stop-color="#FFB27A"/><stop offset="1" stop-color="#B2441C"/></radialGradient></defs>'
+        '<circle cx="17" cy="17" r="13" fill="url(#lG)"/>'
+        '<path d="M17 4 A13 13 0 0 1 30 17" fill="none" stroke="#F2CF72" stroke-width="3" stroke-linecap="round"/></svg>'
         f'<p>{e(t(step_key, lang))}</p></div>',
         unsafe_allow_html=True,
     )
@@ -80,7 +93,7 @@ def _dots(conf: str) -> str:
     return '<span class="fy-dots">' + "".join(f'<span class="{"f" if i < n else ""}"></span>' for i in range(3)) + "</span>"
 
 
-_CRACK = '<svg class="crack" width="34" height="34" viewBox="0 0 34 34"><path d="M30 2 L22 12 L27 16 L17 28 L20 32" fill="none" stroke="#9E2B25" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+_CRACK = '<svg class="crack" width="34" height="34" viewBox="0 0 34 34"><path d="M30 2 L22 12 L27 16 L17 28 L20 32" fill="none" stroke="#FF6B6B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 
 def fracture_card(concept: Concept, gap: GapRef, lang: str) -> None:
@@ -95,7 +108,7 @@ def fracture_card(concept: Concept, gap: GapRef, lang: str) -> None:
     )
 
 
-_SEAM = '<svg width="22" height="14" viewBox="0 0 22 14"><path d="M1 12 L7 3 L11 9 L16 2 L21 10" fill="none" stroke="#C9952B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+_SEAM = '<svg width="22" height="14" viewBox="0 0 22 14"><path d="M1 12 L7 3 L11 9 L16 2 L21 10" fill="none" stroke="#F2CF72" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 
 def mend_card(lesson: Lesson, lang: str) -> None:
